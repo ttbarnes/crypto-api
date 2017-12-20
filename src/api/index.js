@@ -3,6 +3,7 @@ import { Router } from 'express';
 import facets from './facets';
 import poc from './poc';
 import pocBittrex from './pocBittrex';
+import pocGdax from './pocGdax';
 
 export default ({ config, db }) => {
 	let api = Router();
@@ -13,6 +14,8 @@ export default ({ config, db }) => {
 	api.use('/poc', poc());
 
 	api.use('/poc/bittrex', pocBittrex());
+
+	api.use('/poc/gdax', pocGdax());
 
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {
