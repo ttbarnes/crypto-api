@@ -2,43 +2,47 @@ import request from 'request';
 import resource from 'resource-router-middleware';
 import crypto from 'crypto';
 
+const BITFINEX_BASE_URL = 'https://api.bitfinex.com';
+const BITFINEX_BALANCES_URL = '/v1/balances';
+
 export default () => resource({
 
   id: 'poc',
 
   /** GET / - List all entities */
-  index({ params }, res) {
-    const baseUrl = 'https://api.bitfinex.com'
+  index(req, res) {
+    const queryName = req.query.name;
+    const queryKey = req.query.key;
+    const querySecret = req.query.secret;
 
-    const url = '/v1/balances'
     const nonce = Date.now().toString()
-    const completeURL = baseUrl + url
+    const completeURL = BITFINEX_BASE_URL + BITFINEX_BALANCES_URL;
     const body = {
-      request: url,
+      request: BITFINEX_BALANCES_URL,
       nonce
     }
     const payload = new Buffer(JSON.stringify(body))
       .toString('base64')
 
     const signature = crypto
-      .createHmac('sha384', process.env.BITFINEX_API_SECRET)
+      .createHmac('sha384', querySecret)
       .update(payload)
       .digest('hex')
 
     const options = {
       url: completeURL,
       headers: {
-        'X-BFX-APIKEY': process.env.BITFINEX_API_KEY,
+        'X-BFX-APIKEY': queryKey,
         'X-BFX-PAYLOAD': payload,
         'X-BFX-SIGNATURE': signature
       },
       body: JSON.stringify(body)
     }
 
-    return request('https://api.bitfinex.com/v1/balances', options, (error, response, body) => {
+    return request(BITFINEX_BASE_URL + BITFINEX_BALANCES_URL, options, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var parsedBody = JSON.parse(body);
-        res.json(parsedBody);
+        return res.json(parsedBody);
       }
     })
   }
