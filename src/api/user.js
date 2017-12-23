@@ -1,22 +1,31 @@
-import resource from 'resource-router-middleware';
 import User from '../models/user';
 
-export default () => resource({
+// Load user and append to req
+export const load = (req, res, next, id) =>
+  User.get(id)
+    .then((user) => {
+      req.user = user; // eslint-disable-line no-param-reassign
+      return next();
+    })
+    .catch(e => next(e));
 
-  id: 'user',
+export const create = ({ body }, res) => {
+  const newUser = new User({
+    username: body.username,
+    password: body.password
+  });
+  return newUser.save((err) => {
+    if (err) {
+      return res.status(400).send({ success: false, message: 'Cannot create new user - probably exists' });
+    }
+    return res.json({ success: true, message: 'Successful created a new user' });
+  });
+};
 
-  /** POST / - Create a new user */
-  create({ body }, res) {
-    const newUser = new User({
-      username: body.username,
-      password: body.password
-    });
-    return newUser.save((err) => {
-      if (err) {
-        return res.status(400).send({ success: false, message: 'Cannot create new user - probably exists' });
-      }
-      return res.json({ success: true, message: 'Successful created a new user' });
-    });
-  },
-
-});
+export const update = (req, res, next) => {
+  const user = req.user;
+  user.keys = req.body.keys;
+  return user.save()
+    .then(saved => res.json(saved))
+    .catch(e => res.json({ error: true }));
+};

@@ -4,26 +4,28 @@ import facets from './facets';
 import poc from './poc';
 import pocBittrex from './pocBittrex';
 import pocGdax from './pocGdax';
-import user from './user';
+import { load, update } from './user';
+
+// TODO: get all routes using api.route
+// like user/*
+// instead of resource middleware
 
 export default ({ config, db }) => {
 	let api = Router();
 
-	// mount the facets resource
-	api.use('/facets', facets({ config, db }));
+	// api.use('/facets', facets({ config, db }));
 
-	api.use('/poc', poc());
+	api.use('/poc', poc())
 
 	api.use('/poc/bittrex', pocBittrex());
 
 	api.use('/poc/gdax', pocGdax());
 
-	api.use('/user', user());
+	api.route('/user/:userId')
+		.put(update)
 
-	// perhaps expose some API metadata at the root
-	api.get('/', (req, res) => {
-		res.json({ version });
-	});
+	// Load user when API with userId route parameter is hit
+	api.param('userId', load);
 
 	return api;
 }

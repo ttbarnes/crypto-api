@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Promise from 'bluebird';
 import bcrypt from 'bcrypt-nodejs';
 
 const Schema = mongoose.Schema; // eslint-disable-line no-unused-vars
@@ -14,7 +15,14 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  keys: [
+    {
+      name: String,
+      secret: String,
+      key: String
+    }
+  ]
 });
 
 /**
@@ -32,6 +40,21 @@ UserSchema.pre('save', function preSave(next){
     });
   });
 });
+
+
+UserSchema.statics = {
+  get(id) {
+    return this.findById(id)
+      .exec()
+      .then((user) => {
+        if (user) {
+          return user;
+        }
+        const err = { error: true };
+        return Promise.reject(err);
+      });
+  }  
+}
 
 /**
  * @typedef User
