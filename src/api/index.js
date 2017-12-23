@@ -19,10 +19,13 @@ import {
 export default ({ config, db }) => {
 	let api = Router();
 
+	// get balances
 	api.use('/poc', poc())
 
+  // get balances
 	api.use('/poc/bittrex', pocBittrex());
 
+	// get balances
 	api.use('/poc/gdax', pocGdax());
 
 	// POST create new user
