@@ -9,10 +9,10 @@ export const load = (req, res, next, id) =>
     })
     .catch(e => next(e));
 
-export const create = ({ body }, res) => {
+export const create = (req, res) => {
   const newUser = new User({
-    username: body.username,
-    password: body.password
+    username: req.body.username,
+    password: req.body.password
   });
   return newUser.save((err) => {
     if (err) {

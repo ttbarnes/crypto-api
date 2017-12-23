@@ -41,6 +41,15 @@ UserSchema.pre('save', function preSave(next){
   });
 });
 
+UserSchema.methods.comparePassword = function comparePassword(passw, cb) {
+  const hash = this.password;
+  bcrypt.compare(passw, hash, (err, isMatch) => {
+    if (err) {
+      return cb(err);
+    }
+    return cb(null, isMatch);
+  });
+};
 
 UserSchema.statics = {
   get(id) {
