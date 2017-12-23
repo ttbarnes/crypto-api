@@ -4,6 +4,7 @@ import facets from './facets';
 import poc from './poc';
 import pocBittrex from './pocBittrex';
 import pocGdax from './pocGdax';
+import user from './user';
 
 export default ({ config, db }) => {
 	let api = Router();
@@ -16,6 +17,8 @@ export default ({ config, db }) => {
 	api.use('/poc/bittrex', pocBittrex());
 
 	api.use('/poc/gdax', pocGdax());
+
+	api.use('/user', user());
 
 	// perhaps expose some API metadata at the root
 	api.get('/', (req, res) => {
