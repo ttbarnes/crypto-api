@@ -5,6 +5,7 @@ import request from 'request';
 import cors from 'cors';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 import initializeDb from './db';
 import middleware from './middleware';
 import api from './api';
