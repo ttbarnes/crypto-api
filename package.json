@@ -42,6 +42,7 @@
     "morgan": "^1.8.0",
     "node-bittrex-api": "^0.8.1",
     "passport": "^0.4.0",
+    "passport-jwt": "^3.0.1",
     "request": "^2.83.0",
     "resource-router-middleware": "^0.6.0"
   },

@@ -51,8 +51,8 @@ UserSchema.methods.comparePassword = function comparePassword(passw, cb) {
   });
 };
 
-UserSchema.statics = {
-  get(id) {
+  UserSchema.statics = {
+    get(id) {
     return this.findById(id)
       .exec()
       .then((user) => {

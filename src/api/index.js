@@ -7,9 +7,8 @@ import pocGdax from './pocGdax';
 import login from './auth';
 import { checkToken } from './token';
 import {
-	load,
 	create,
-	update 
+	update
 } from './user';
 
 // TODO: get all routes using api.route
@@ -38,16 +37,13 @@ export default ({ config, db }) => {
 			update(req, res, next);
 		});
 
-	// PUT user auth/token check
+	// POST user auth/token check, returns user data
 	api.route('/auth')
 		.post(checkToken);
 
 	// POST user login
 	api.route('/auth/login')
 		.post(login);
-
-	// load user when route param is hit
-	api.param('userId', load);
 
 	return api;
 }

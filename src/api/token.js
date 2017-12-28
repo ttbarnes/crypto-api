@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
-const JWT_SECRET = 'asdfafljn12lk3m12lk31io23jdsion12o';
 
 const getToken = (headers) => {
   if (headers && headers.authorization) {
@@ -16,9 +15,9 @@ const getToken = (headers) => {
 export function checkToken(req, res) {
   const token = getToken(req.headers);
   if (token) {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return User.findOne({
-      username: decoded._doc.username
+      username: decoded.data.username
     }, (err, user) => {
       if (err) throw err;
 
@@ -26,11 +25,15 @@ export function checkToken(req, res) {
         return res.status(403).send({ errorCheckingToken: true });
       }
       if (user) {
-        return res.status(200).send({ success: true });
+        const resUserObj = {
+          _id: decoded.data._id,
+          username: decoded.data.username,
+          keys: decoded.data.keys
+        };
+        return res.status(200).send({ success: true, resUserObj });
       }
       return err;
     });
   }
-  console.log('---check token doing return...');
   return res.status(403).send({ success: false, message: 'No token provided' });
 }

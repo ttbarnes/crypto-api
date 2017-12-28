@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
-// import config from '../../config/env';
-const JWT_SECRET = 'asdfafljn12lk3m12lk31io23jdsion12o';
 // const JWT_EXPIRY_DATE = '7 days';
 
 /* istanbul ignore next */
@@ -18,7 +16,7 @@ function login(req, res) {
           jwt.sign({
             exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1 hour
             data: usr
-          }, JWT_SECRET, (jwtErr, token) => {
+          }, process.env.JWT_SECRET, (jwtErr, token) => {
             if (jwtErr) {
               return jwtErr;
             }

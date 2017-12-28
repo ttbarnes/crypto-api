@@ -1,14 +1,5 @@
 import User from '../models/user';
 
-// Load user and append to req
-export const load = (req, res, next, id) =>
-  User.get(id)
-    .then((user) => {
-      req.user = user; // eslint-disable-line no-param-reassign
-      return next();
-    })
-    .catch(e => next(e));
-
 export const create = (req, res) => {
   const newUser = new User({
     username: req.body.username,
