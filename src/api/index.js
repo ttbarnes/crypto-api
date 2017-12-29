@@ -10,6 +10,7 @@ import {
 	create,
 	update
 } from './user';
+import pocKeys from './pocKeys';
 
 // TODO: get all routes using api.route
 // like user/*
@@ -33,8 +34,8 @@ export default ({ config, db }) => {
 
 	// PUT update user
 	api.route('/user/:userId')
-		.put(passport.authenticate('jwt', { session: false }), (req, res, next) => {
-			update(req, res, next);
+		.put(passport.authenticate('jwt', { session: false }), (req, res) => {
+			update(req, res);
 		});
 
 	// POST user auth/token check, returns user data
@@ -44,6 +45,14 @@ export default ({ config, db }) => {
 	// POST user login
 	api.route('/auth/login')
 		.post(login);
+
+	// POC
+	// POST keys to user
+	// TODO: hook up encryption/decryption
+	api.route('/poc/keys')
+		.put(passport.authenticate('jwt', { session: false }), (req, res, next) => {
+			pocKeys(req, res, next);
+		});
 
 	return api;
 }

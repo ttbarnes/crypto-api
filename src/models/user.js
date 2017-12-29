@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
   },
   keys: [
     {
-      name: String,
+      exchange: String,
       secret: String,
       key: String
     }
@@ -51,8 +51,8 @@ UserSchema.methods.comparePassword = function comparePassword(passw, cb) {
   });
 };
 
-  UserSchema.statics = {
-    get(id) {
+UserSchema.statics = {
+  get(id) {
     return this.findById(id)
       .exec()
       .then((user) => {
