@@ -3,10 +3,17 @@ import { updateUserKeys } from './user';
 
 // http://lollyrock.com/articles/nodejs-encryption/
 
-function pocKeys(req, res) {
+const algorithm = 'aes-256-ctr';
+const pword = process.env.KEYS_ENCRYPT_SECRET;
 
-  const algorithm = 'aes-256-ctr';
-  const pword = process.env.KEYS_ENCRYPT_SECRET;
+export const decrypt = (str) => {
+  var decipher = crypto.createDecipher(algorithm, pword)
+  var dec = decipher.update(str, 'hex', 'utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
+
+function pocKeys(req, res) {
 
   function encrypt(text) {
     var cipher = crypto.createCipher(algorithm, pword)
@@ -15,23 +22,21 @@ function pocKeys(req, res) {
     return crypted;
   }
 
-  function decrypt(text) {
-    var decipher = crypto.createDecipher(algorithm, pword)
-    var dec = decipher.update(text, 'hex', 'utf8')
-    dec += decipher.final('utf8');
-    return dec;
-  }
+  // const encrypted = encrypt("hello world");
 
-  const encrypted = encrypt("hello world");
+  const encrypted = {
+    key: encrypt(req.body.key),
+    secret: encrypt(req.body.secret)
+  };
 
-  const tempNewKeys = {
-    "key": "testKey",
-    "exchange": "test",
-    "secret": "testSecret",
-    "userId": "5a45733812dd6707fb580f3e"
-  }
+  const encrypObj = {
+    userId: req.body.userId,
+    exchange: req.body.exchange,
+    key: encrypted.key,
+    secret: encrypted.secret
+  };
 
-  return updateUserKeys(req, res, tempNewKeys);
+  return updateUserKeys(req, res, encrypObj);
 }
 
 export default pocKeys;

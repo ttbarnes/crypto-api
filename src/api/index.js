@@ -5,7 +5,7 @@ import poc from './poc';
 import pocBittrex from './pocBittrex';
 import pocGdax from './pocGdax';
 import login from './auth';
-import { checkToken } from './token';
+import { checkTokenGetUserData } from './token';
 import {
 	create,
 	update
@@ -40,7 +40,7 @@ export default ({ config, db }) => {
 
 	// POST user auth/token check, returns user data
 	api.route('/auth')
-		.post(checkToken);
+		.post(checkTokenGetUserData);
 
 	// POST user login
 	api.route('/auth/login')

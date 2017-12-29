@@ -22,23 +22,27 @@ export const update = (req, res, user) => {
 export const updateUserKeys = (req, res, newExchangeObj) => {
   return User.get(req.body.userId).then((usr) => {
     let updatedExchanges = [];
-    usr.keys.map((k, i) => {
-      const isLastItem = i === usr.keys.length - 1;
-      const exchangeExists = k.exchange !== newExchangeObj.exchange;
-      if (exchangeExists) {
-        updatedExchanges = [
-          ...updatedExchanges,
-          k
-        ];
-        return updatedExchanges;
-      }
-      if (!exchangeExists && isLastItem) {
-        updatedExchanges.push(newExchangeObj);
+    if (usr.keys.length) {
+      usr.keys.map((k, i) => {
+        const isLastItem = i === usr.keys.length - 1;
+        const exchangeExists = k.exchange !== newExchangeObj.exchange;
+        if (exchangeExists) {
+          updatedExchanges = [
+            ...updatedExchanges,
+            k
+          ];
+          return updatedExchanges;
+        }
+        if (!exchangeExists && isLastItem) {
+          updatedExchanges.push(newExchangeObj);
+          return k;
+        }
         return k;
-      }
-      return k;
-    });
-    usr.keys = updatedExchanges;
+      });
+      usr.keys = updatedExchanges;
+    } else {
+      usr.keys = [ newExchangeObj ];
+    }
     update(req, res, usr);
   });
 }
