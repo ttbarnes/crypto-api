@@ -7,11 +7,10 @@ const BITFINEX_BALANCES_URL = '/v1/balances';
 
 export default () => resource({
 
-  id: 'poc',
+  id: 'pocBitfinex',
 
   /** GET / - List all entities */
   index(req, res) {
-    const queryName = req.query.name;
     const queryKey = req.query.key;
     const querySecret = req.query.secret;
 

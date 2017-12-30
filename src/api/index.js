@@ -1,7 +1,7 @@
 import { version } from '../../package.json';
 import { Router } from 'express';
 import passport from 'passport';
-import poc from './poc';
+import pocBitfinex from './pocBitfinex';
 import pocBittrex from './pocBittrex';
 import pocGdax from './pocGdax';
 import login from './auth';
@@ -20,7 +20,7 @@ export default ({ config, db }) => {
 	let api = Router();
 
 	// get balances
-	api.use('/poc', poc())
+	api.use('/poc/bitfinex', pocBitfinex())
 
   // get balances
 	api.use('/poc/bittrex', pocBittrex());
