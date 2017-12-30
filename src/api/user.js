@@ -23,9 +23,10 @@ export const updateUserKeys = (req, res, newExchangeObj) => {
   return User.get(req.body.userId).then((usr) => {
     let updatedExchanges = [];
     if (usr.keys.length) {
+      const exchangeExists = usr.keys.find((k) => k.exchange === newExchangeObj.exchange);
+      
       usr.keys.map((k, i) => {
         const isLastItem = i === usr.keys.length - 1;
-        const exchangeExists = k.exchange !== newExchangeObj.exchange;
         if (exchangeExists) {
           updatedExchanges = [
             ...updatedExchanges,
@@ -34,7 +35,10 @@ export const updateUserKeys = (req, res, newExchangeObj) => {
           return updatedExchanges;
         }
         if (!exchangeExists && isLastItem) {
-          updatedExchanges.push(newExchangeObj);
+          updatedExchanges = [
+            ...usr.keys,
+            newExchangeObj
+          ];
           return k;
         }
         return k;
