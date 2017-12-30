@@ -46,13 +46,10 @@ export default ({ config, db }) => {
 	api.route('/auth/login')
 		.post(login);
 
-	// POC
 	// POST keys to user
-	// TODO: hook up encryption/decryption
+	// TODO: hook up encryption/decryption (issues with passport.authenticate approach)
 	api.route('/poc/keys')
-		.put(passport.authenticate('jwt', { session: false }), (req, res, next) => {
-			pocKeys(req, res, next);
-		});
+		.put(pocKeys);
 
 	return api;
 }

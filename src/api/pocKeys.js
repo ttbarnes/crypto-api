@@ -14,7 +14,7 @@ export const decrypt = (str) => {
 }
 
 function pocKeys(req, res) {
-
+  // todo: auth check
   function encrypt(text) {
     var cipher = crypto.createCipher(algorithm, pword)
     var crypted = cipher.update(text, 'utf8', 'hex')
@@ -22,11 +22,9 @@ function pocKeys(req, res) {
     return crypted;
   }
 
-  // const encrypted = encrypt("hello world");
-
   const encrypted = {
-    key: encrypt(req.body.key),
-    secret: encrypt(req.body.secret)
+    key: encrypt(req.body.apiKey),
+    secret: encrypt(req.body.apiSecret)
   };
 
   const encrypObj = {
