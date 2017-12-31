@@ -19,7 +19,7 @@ export default () => resource({
     const body = {
       request: BITFINEX_BALANCES_URL,
       nonce
-    }
+    };
     const payload = new Buffer(JSON.stringify(body))
       .toString('base64')
 
@@ -37,7 +37,6 @@ export default () => resource({
       },
       body: JSON.stringify(body)
     }
-
     return request(BITFINEX_BASE_URL + BITFINEX_BALANCES_URL, options, (error, response, body) => {
       if (!error && response.statusCode == 200) {
         var parsedBody = JSON.parse(body);

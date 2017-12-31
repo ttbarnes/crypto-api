@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user';
-// const JWT_EXPIRY_DATE = '7 days';
+const JWT_EXPIRY_DATE = '7 days';
 
 /* istanbul ignore next */
 function login(req, res) {
@@ -14,7 +14,8 @@ function login(req, res) {
       usr.comparePassword(req.body.password, (cPErr, isMatch) => {
         if (isMatch && !cPErr) {
           jwt.sign({
-            exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1 hour
+            // exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1 hour
+            exp: JWT_EXPIRY_DATE,
             data: usr
           }, process.env.JWT_SECRET, (jwtErr, token) => {
             if (jwtErr) {
